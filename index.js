@@ -101,6 +101,8 @@ function render(nameList) {
 //remove the object in the Array
 function remove(index) {
   nameList.splice(index, 1);
+
+  arrayObjectsStorage.splice(index,1);
   render(nameList);
   updateStudentCounter();
 
