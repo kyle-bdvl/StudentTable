@@ -45,13 +45,12 @@ submit.addEventListener('click', () => {
   // if either is empty, don’t go through with the add
   var truth = (formName == '' || formAge == '');
 
-  printConsole(); // just to peek in the console what’s going on
+  printConsole(); 
 
   if (truth) {
-    // give an alert depending on what’s missing (basic validation)
+    // give an alert depending on what’s missing 
     (formName == '' ? alert('insert Name') : alert('insert Age'));
   } else {
-    // everything’s good, let’s store the student!
     addToList(formName, formAge, formCheck);
     render(nameList);
     updateStudentCounter();
