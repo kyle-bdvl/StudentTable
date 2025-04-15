@@ -1,6 +1,53 @@
 form {
   display: flex;
   flex-direction: column;
-  border: solid 1px red;
   gap:14px;
 }
+
+  /* style the whole table */
+  #tableOfData {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* header row */
+  #tableOfData th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    text-align: left;
+  }
+
+  /* data rows */
+  #tableOfData td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  #tableOfData tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* button style */
+  #tableOfData button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  #tableOfData button:hover {
+    background-color: #ff1a1a;
+  }
+
+  /* student counter styling */
+  #studentCounter {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #333;
+  }

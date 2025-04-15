@@ -1,80 +1,94 @@
+// grabbing the input fields from the DOM
 let Name = document.getElementById("Name");
 let age = document.getElementById("age");
-let check = document.getElementById("checked");
+let check = document.getElementById("checked"); // checkbox for Admin
 
-//for the local storage 
+// array to store student objects for local storage
 let arrayObjectsStorage = [];
 
+// grabbing elements from the DOM that we’ll need
 let submit = document.getElementById("AddStudent");
 let tableRows = document.getElementById("tableOfData");
+let container = document.querySelector(".container");
 
-let container = document.querySelector(".container")
+// will hold values from form inputs
 let formName, formAge;
-let formCheck=null;
+let formCheck = null; // start off null just to be clean
 
-//array to store the student so that i can delete it haha 
+// array to store the list of students for display and deletion
 let nameList = [];
-//studentCounter declared here
+
+// creating a div to show number of students (cool little stat box)
 let studentCounter = document.createElement('div');
 
-//adding a student counter at the bottom of the form; 
+// add the student counter to the DOM initially so it’s not empty
 function studentTextCounter() {
   studentCounter.innerHTML = `
     <p>number of students : ${nameList.length}</p>`;
   container.appendChild(studentCounter);
-
 };
-studentTextCounter();
+studentTextCounter(); // call it right away so it's visible
 
-
+// update the counter whenever students are added or removed
 function updateStudentCounter() {
   studentCounter.innerHTML = `
     <p>number of students : ${nameList.length}</p>`;
 }
 
-//the main button for the UI
-
+// main button that does renders the UI
 submit.addEventListener('click', () => {
+  // get values from input fields
   formName = Name.value;
   formAge = age.value;
   formCheck = check.checked;
-  var truth = (formName == '' || formAge == '')
-  printConsole();
+
+  // if either is empty, don’t go through with the add
+  var truth = (formName == '' || formAge == '');
+
+  printConsole(); // just to peek in the console what’s going on
+
   if (truth) {
+    // give an alert depending on what’s missing (basic validation)
     (formName == '' ? alert('insert Name') : alert('insert Age'));
-  }
-  else {
+  } else {
+    // everything’s good, let’s store the student!
     addToList(formName, formAge, formCheck);
     render(nameList);
-
     updateStudentCounter();
-    console.log(nameList);
+    console.log(nameList); // debugging info
   }
 });
 
+// function to print out form values to console (nice for debugging)
 function printConsole() {
   console.log(formName);
   console.log(formAge);
-  console.log(formCheck + "button is not clicked so there for not an Admin");
+  console.log(formCheck + " button is not clicked so therefore not an Admin");
 }
 
-
-
+// actually builds and stores the student object
 function addToList(name, age, action) {
-  let admin = (action ? 'Admin' : 'notAdmin')
+  let admin = (action ? 'Admin' : 'notAdmin'); // toggle role
   let objects = { name, age, admin };
-  //pushing the objects into the local storage/ 
+
+  // push into the array that will be saved in local storage
   arrayObjectsStorage.push(objects);
-  console.log(objects)
+  console.log(objects); // log what's going in
+
+  // stringify and save into localStorage
   let values = JSON.stringify(arrayObjectsStorage);
   localStorage.setItem("students", values);
-  //pushing the objects into the array 
+
+  // also store into our working array
   nameList.push(objects);
 }
-//this will take the newList and run it to get all the information
+
+// builds and displays the table rows
 function render(nameList) {
   const table = document.getElementById("tableOfData");
-  table.innerHTML = '';
+  table.innerHTML = ''; // clear previous content first
+
+  // header row for the table (name, age, action)
   let newHeader = document.createElement('tr');
   newHeader.innerHTML = `
         <th>Name</th>
@@ -82,8 +96,8 @@ function render(nameList) {
         <th>Action</th>
   `;
   tableRows.appendChild(newHeader);
-  //upon rerender it will show the value
-  
+
+  // loop through list and create rows dynamically
   nameList.map((list, index) => {
     let newRow = document.createElement('tr');
     newRow.setAttribute("id", "newRow");
@@ -92,34 +106,34 @@ function render(nameList) {
       <td>${list.age}</td>
       <td>${list.admin}</td>
       <button id="Remove" onclick="remove(${index})">Remove</button>
-  `;//end of the appending of the table stuff
-    tableRows.appendChild(newRow);
-  }
-  )
-};
+    `; // inject HTML into the table row
 
-//remove the object in the Array
+    tableRows.appendChild(newRow); // add to table
+  });
+}
+
+// removes student by index
 function remove(index) {
+  // remove from the working array
   nameList.splice(index, 1);
+  arrayObjectsStorage.splice(index, 1);
 
-  arrayObjectsStorage.splice(index,1);
+  // refresh UI and counter
   render(nameList);
   updateStudentCounter();
 
-  //part to update the local Storage
+  // also update the localStorage so it's in sync
   let storedValues = localStorage.getItem("students");
-
   var arrayStorage = JSON.parse(storedValues);
 
   arrayStorage.splice(index, 1);
-  storedValues = JSON.stringify(arrayStorage)
+  storedValues = JSON.stringify(arrayStorage);
   localStorage.setItem("students", storedValues);
 };
 
-function showCounterStudent(){
+// shows or hides the student counter based on Admin checkbox
+function showCounterStudent() {
   studentCounter.style.display = check.checked ? "block" : "none";
 }
-//upon render the showCounterStudent should run 
+// make sure the counter is correctly displayed when page loads
 showCounterStudent();
-
-
